@@ -13,6 +13,7 @@ class IsAuthorAdminOrReadOnly(permissions.BasePermission):
                     )
                 )
 
+
 class IsAdminOrReadOnly(permissions.BasePermission):
     message = ('Для проверенных пользователей в статусе '
                'администратора иначе только просмотр.')

@@ -100,7 +100,7 @@ class Recipe(models.Model):
                 name='unique_for_author',
             ),
         ]
-    
+
     def __str__(self) -> str:
         return self.name
 

@@ -6,13 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.permissions import (
-    SAFE_METHODS,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly
-)
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .filters import IngredientFilter, RecipeFilter
@@ -178,7 +173,11 @@ class RecipeViewSet(ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == 'DELETE':
-            is_shopping_cart = get_object_or_404(Favorite, user=user, recipe=recipe)
+            is_shopping_cart = get_object_or_404(
+                Favorite,
+                user=user,
+                recipe=recipe
+            )
             is_shopping_cart.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -204,6 +203,10 @@ class RecipeViewSet(ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == 'DELETE':
-            is_shopping_cart = get_object_or_404(ShoppingСart, user=user, recipe=recipe)
+            is_shopping_cart = get_object_or_404(
+                ShoppingСart,
+                user=user,
+                recipe=recipe
+            )
             is_shopping_cart.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
