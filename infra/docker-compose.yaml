@@ -9,7 +9,7 @@ services:
       - ./.env
 
   backend:
-    build: dmitriy839/foodgram-backend:latest
+    image: dmitriy839/foodgram-backend:latest
     restart: always
     volumes:
       - static_value:/app/static/
