@@ -9,15 +9,21 @@ services:
       - ./.env
 
   backend:
-    build: dmitriy839/backend:latest
+    build: dmitriy839/foodgram-backend:latest
     restart: always
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
+      - redoc:/app/api/docs/
     depends_on:
       - db
     env_file:
       - ./.env
+
+  frontend:
+    image: dmitriy839/foodgram-frontend:latest
+    volumes:
+      - ../frontend/:/app/result_build/
 
   nginx:
     image: nginx:1.21.3-alpine
