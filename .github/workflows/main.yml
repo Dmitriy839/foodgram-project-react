@@ -90,6 +90,6 @@ jobs:
             sudo docker-compose up -d
             sudo docker-compose exec backend python manage.py makemigrations
             sudo docker-compose exec backend python manage.py migrate
-            sudo docker compose exec backend python manage.py collectstatic --noinput
+            sudo docker-compose exec backend python manage.py collectstatic --noinput
             sudo docker-compose exec backend python manage.py loadmodels --path 'data/ingredients.json'
             sudo docker-compose exec backend python manage.py loadmodels --path 'data/tag.json'
