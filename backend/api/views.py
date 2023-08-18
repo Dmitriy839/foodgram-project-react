@@ -97,11 +97,11 @@ class RecipeViewSet(ModelViewSet):
             return RecipeSerializer
         return RecipeCreateSerializer
 
-    #def get_queryset(self):
-    #    recipes = Recipe.objects.prefetch_related(
-    #        "amount_ingredient__ingredients", "tags"
-    #    )
-    #    return recipes
+    def get_queryset(self):
+        recipes = Recipe.objects.prefetch_related(
+            "amount_ingredient__ingredients", "tags"
+        )
+        return recipes
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
