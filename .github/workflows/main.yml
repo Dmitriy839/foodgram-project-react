@@ -78,7 +78,8 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
             sudo docker-compose stop
-            sudo docker-compose rm backend
+            sudo docker ps -a -q | xargs sudo docker rm
+            sudo docker image prune -a -f
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
@@ -87,3 +88,8 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             sudo docker-compose up -d
+            sudo docker-compose exec backend python manage.py makemigrations
+            sudo docker-compose exec backend python manage.py migrate
+            sudo docker compose exec backend python manage.py collectstatic --noinput
+            sudo docker-compose exec backend python manage.py loadmodels --path 'data/ingredients.json'
+            sudo docker-compose exec backend python manage.py loadmodels --path 'data/tag.json'
