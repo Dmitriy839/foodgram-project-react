@@ -43,7 +43,9 @@ class CustomUserViewSet(UserViewSet):
     pagination_class = CustomPagination
 
     @action(
-        detail=True, methods=["post", "delete"], permission_classes=[IsAuthenticated]
+        detail=True,
+        methods=["post", "delete"],
+        permission_classes=[IsAuthenticated]
     )
     def subscribe(self, request, **kwargs):
         user = request.user
@@ -52,13 +54,20 @@ class CustomUserViewSet(UserViewSet):
         data = {"user": request.user.id, "author": self.kwargs.get("id")}
 
         if request.method == "POST":
-            serializer = SubscriptionSerializer(data=data, context={"request": request})
+            serializer = SubscriptionSerializer(
+                data=data,
+                context={"request": request}
+            )
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == "DELETE":
-            subscription = get_object_or_404(Subscriptions, user=user, author=author)
+            subscription = get_object_or_404(
+                Subscriptions,
+                user=user,
+                author=author
+            )
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -67,7 +76,11 @@ class CustomUserViewSet(UserViewSet):
         user = request.user
         queryset = User.objects.filter(subscribers__user=user)
         pages = self.paginate_queryset(queryset)
-        serializer = SubscribeSerializer(pages, many=True, context={"request": request})
+        serializer = SubscribeSerializer(
+            pages,
+            many=True,
+            context={"request": request}
+        )
         return self.get_paginated_response(serializer.data)
 
 
@@ -123,15 +136,18 @@ class RecipeViewSet(ModelViewSet):
     @action(detail=False, methods=["GET"])
     def download_shopping_cart(self, request):
         ingredients = (
-            AmountIngredient.objects.filter(recipe__shopping_cart__user=request.user)
-            .order_by("ingredients__name")
+            AmountIngredient.objects.filter(
+            recipe__shopping_cart__user=request.user
+            ).order_by("ingredients__name")
             .values("ingredients__name", "ingredients__measurement_unit")
             .annotate(amount=Sum("amount"))
         )
         return self.send_message(ingredients)
 
     @action(
-        detail=True, methods=["post", "delete"], permission_classes=(IsAuthenticated,)
+        detail=True,
+        methods=["post", "delete"],
+        permission_classes=(IsAuthenticated,)
     )
     def favorite(self, request, pk):
         user = request.user
@@ -147,7 +163,11 @@ class RecipeViewSet(ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == "DELETE":
-            is_shopping_cart = get_object_or_404(Favorite, user=user, recipe=recipe)
+            is_shopping_cart = get_object_or_404(
+                Favorite,
+                user=user,
+                recipe=recipe
+            )
             is_shopping_cart.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -170,6 +190,10 @@ class RecipeViewSet(ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == "DELETE":
-            is_shopping_cart = get_object_or_404(ShoppingСart, user=user, recipe=recipe)
+            is_shopping_cart = get_object_or_404(
+                ShoppingСart,
+                user=user,
+                recipe=recipe
+            )
             is_shopping_cart.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)

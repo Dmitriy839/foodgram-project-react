@@ -41,7 +41,14 @@ class CustomUserSerializer(UserSerializer):
 
     class Meta:
         model = User
-        fields = ("email", "id", "username", "first_name", "last_name", "is_subscribed")
+        fields = (
+            "email",
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "is_subscribed"
+        )
 
     def get_is_subscribed(self, obj):
         user = self.context.get("request").user
@@ -112,7 +119,10 @@ class RecipeIngredientSerializer(ModelSerializer):
 class RecipeSerializer(ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = CustomUserSerializer(read_only=True)
-    ingredients = RecipeIngredientSerializer(many=True, source="amount_ingredient")
+    ingredients = RecipeIngredientSerializer(
+        many=True,
+        source="amount_ingredient"
+    )
     is_favorited = SerializerMethodField(read_only=True)
     is_in_shopping_cart = SerializerMethodField(read_only=True)
 
@@ -135,14 +145,16 @@ class RecipeSerializer(ModelSerializer):
         request = self.context.get("request")
         return (
             request.user.is_authenticated
-            and Favorite.objects.filter(user=request.user, recipe_id=obj).exists()
+            and Favorite.objects.filter(user=request.user, recipe_id=obj)
+            .exists()
         )
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get("request")
         return (
             request.user.is_authenticated
-            and ShoppingСart.objects.filter(user=request.user, recipe_id=obj).exists()
+            and ShoppingСart.objects.filter(user=request.user, recipe_id=obj)
+            .exists()
         )
 
 
@@ -162,7 +174,14 @@ class RecipeCreateSerializer(ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ("name", "tags", "ingredients", "text", "image", "cooking_time")
+        fields = (
+            "name",
+            "tags",
+            "ingredients",
+            "text",
+            "image",
+            "cooking_time"
+        )
 
     def create_ingredients(self, ingredient, instance):
         for ingredient_data in ingredient:

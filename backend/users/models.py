@@ -43,7 +43,8 @@ class Subscriptions(models.Model):
         on_delete=models.CASCADE,
     )
     date_added = models.DateTimeField(
-        verbose_name="Дата создания подписки", auto_now_add=True, editable=False
+        verbose_name="Дата создания подписки",
+        auto_now_add=True, editable=False
     )
 
     class Meta:
